@@ -1,0 +1,24 @@
+### Add product to cart
+POST http://localhost:3000/cart/add
+Content-Type: application/json
+
+{
+  "userId": "4e70b363-6f0f-491d-b7e7-bdf1e305035f",
+  "productId": "7e00ed18-3a34-4384-9b13-ef1d398dc383",
+  "quantity": 2
+}
+
+### Get current user's cart
+GET http://localhost:3000/cart
+
+### Update cart item quantity
+PUT http://localhost:3000/cart/update
+Content-Type: application/json
+
+{
+  "productId": "1",
+  "quantity": 3
+}
+
+### Remove product from cart
+DELETE http://localhost:3000/cart/remove/1 

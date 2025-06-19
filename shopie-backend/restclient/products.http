@@ -1,0 +1,33 @@
+### Create a new product
+POST http://localhost:3000/products
+Content-Type: application/json
+
+{
+  "name": "Laptop2",
+  "shortDescription": "A powerful laptop for work and play.",
+  "price": 1200.99,
+  "image": "https://images.pexels.com/photos/2047905/pexels-photo-2047905.jpeg",
+  "stockQuantity": 10
+}
+
+### Get all products
+GET http://localhost:3000/products
+
+### Search products
+GET http://localhost:3000/products?search=laptop2
+
+### Get product by ID
+GET http://localhost:3000/products/269130b4-12dd-4cf7-8c36-c42e1cca15d6
+
+### Update product
+PUT http://localhost:3000/products/269130b4-12dd-4cf7-8c36-c42e1cca15d6
+Content-Type: application/json
+
+{
+  "name": "Updated Laptop",
+  "price": 999.99,
+   "image": "https://images.pexels.com/photos/2047905/pexels-photo-2047905.jpeg"
+}
+
+### Delete product
+DELETE http://localhost:3000/products/1 

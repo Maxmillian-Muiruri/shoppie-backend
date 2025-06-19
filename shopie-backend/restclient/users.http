@@ -1,0 +1,39 @@
+### Create a new user
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name": "Johnbrians Doe",
+  "email": "johnbrians@example.com",
+  "password": "password123",
+  "role": "customer"
+}
+
+### Create an admin user
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name": "Admin User",
+  "email": "admin@example.com",
+  "password": "admin123",
+  "role": "admin"
+}
+
+### Get all users
+GET http://localhost:3000/users
+
+### Get user by ID
+GET http://localhost:3000/users/9809958e-194b-40e9-a9d9-ec8696f85c98
+
+### Update user
+PUT http://localhost:3000/users/afbac0d6-3e62-49eb-befe-194a500531a1
+Content-Type: application/json
+
+{
+  "name": "John brian Updated",
+  "email": "johnbrian.updated@example.com"
+}
+
+### Delete user
+DELETE http://localhost:3000/users/f89d0c84-9edb-4722-844d-a65702bda2f0
