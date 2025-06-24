@@ -8,11 +8,13 @@ import {
   Param,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './services/user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserResponse } from './interfaces/user.interface';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('users')
 export class UserController {
@@ -27,16 +29,19 @@ export class UserController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async findAllUsers(): Promise<IUserResponse[]> {
     return this.userService.findAllUsers();
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async findUserById(@Param('id') id: string): Promise<IUserResponse> {
     return this.userService.findUserById(id);
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard)
   async updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
@@ -46,6 +51,7 @@ export class UserController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(JwtAuthGuard)
   async deleteUser(@Param('id') id: string): Promise<void> {
     return this.userService.deleteUser(id);
   }

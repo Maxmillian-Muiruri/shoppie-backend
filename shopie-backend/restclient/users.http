@@ -1,3 +1,6 @@
+### Set your JWT token here after login
+@token = <paste-your-jwt-token-here>
+
 ### Create a new user
 POST http://localhost:3000/users
 Content-Type: application/json
@@ -7,6 +10,16 @@ Content-Type: application/json
   "email": "johnbrians@example.com",
   "password": "password123",
   "role": "customer"
+}
+
+
+### Login as a user
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "johnbrians@example.com",
+  "password": "password123"
 }
 
 ### Create an admin user
@@ -22,13 +35,16 @@ Content-Type: application/json
 
 ### Get all users
 GET http://localhost:3000/users
+Authorization: Bearer {{token}}
 
 ### Get user by ID
 GET http://localhost:3000/users/9809958e-194b-40e9-a9d9-ec8696f85c98
+Authorization: Bearer {{token}}
 
 ### Update user
 PUT http://localhost:3000/users/afbac0d6-3e62-49eb-befe-194a500531a1
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "name": "John brian Updated",
@@ -37,3 +53,8 @@ Content-Type: application/json
 
 ### Delete user
 DELETE http://localhost:3000/users/f89d0c84-9edb-4722-844d-a65702bda2f0
+Authorization: Bearer {{token}}
+
+### Checkout (buy) cart
+POST http://localhost:3000/cart/checkout
+

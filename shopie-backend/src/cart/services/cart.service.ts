@@ -122,6 +122,10 @@ export class CartService {
     return this.mapToCartItemResponse(updated);
   }
 
+  async clearCart(userId: string): Promise<void> {
+    await this.prisma.cartItem.deleteMany({ where: { userId } });
+  }
+
   private async mapToCartItemResponse(item: any): Promise<CartItemResponseDto> {
     const product = await this.prisma.product.findUnique({
       where: { id: item.productId },

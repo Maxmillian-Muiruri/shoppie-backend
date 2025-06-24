@@ -1,0 +1,44 @@
+### Set customer JWT token
+@customerToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDRiOGQ1NS1kNDY1LTQ2YWUtOTQ1ZS1hYjgyNGZiYzg4NzMiLCJlbWFpbCI6ImpvaG4yQGV4YW1wbGUuY29tIiwicm9sZSI6IkNVU1RPTUVSIiwiaWF0IjoxNzUwNzM0MDA4LCJleHAiOjE3NTA4MjA0MDh9.qlMrgc5Gy4Mod3uqYs0L4hzulkz02OlouEyBYx8WFok
+
+### add to cart
+POST http://localhost:3000/cart/add
+Content-Type: application/json
+Authorization: Bearer {{customerToken}}
+
+{
+  "productId": "22b3054a-058f-4899-8e23-6f6c04c031d2",
+  "quantity": 2
+}
+
+### Add Updated Laptop to cart
+POST http://localhost:3000/cart/add
+Content-Type: application/json
+Authorization: Bearer {{customerToken}}
+
+{
+  "productId": "5956f8e0-a793-4415-b8c2-6d127f289c1e",
+  "quantity": 1
+}
+
+### Get current user's cart
+GET http://localhost:3000/cart
+Authorization: Bearer {{customerToken}}
+
+### Update cart item quantity
+PUT http://localhost:3000/cart/update
+Content-Type: application/json
+Authorization: Bearer {{customerToken}}
+
+{
+  "productId": "22b3054a-058f-4899-8e23-6f6c04c031d2",
+  "quantity": 3
+}
+
+### Remove product from cart
+DELETE http://localhost:3000/cart/remove/22b3054a-058f-4899-8e23-6f6c04c031d2
+Authorization: Bearer {{customerToken}}
+
+### Checkout (buy) cart
+POST http://localhost:3000/cart/checkout
+Authorization: Bearer {{customerToken}}

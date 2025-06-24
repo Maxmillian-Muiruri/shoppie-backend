@@ -1,6 +1,10 @@
+### Set your JWT token here after login
+@token = <paste-your-jwt-token-here>
+
 ### Create a new product
 POST http://localhost:3000/products
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "name": "Laptop2",
@@ -22,6 +26,7 @@ GET http://localhost:3000/products/269130b4-12dd-4cf7-8c36-c42e1cca15d6
 ### Update product
 PUT http://localhost:3000/products/269130b4-12dd-4cf7-8c36-c42e1cca15d6
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "name": "Updated Laptop",
@@ -30,4 +35,5 @@ Content-Type: application/json
 }
 
 ### Delete product
-DELETE http://localhost:3000/products/1 
+DELETE http://localhost:3000/products/1
+Authorization: Bearer {{token}} 

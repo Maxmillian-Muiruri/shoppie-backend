@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsNumber, Min } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsUrl, Min } from 'class-validator';
 
 export class CreateProductDto {
   @IsNotEmpty()
@@ -15,8 +15,8 @@ export class CreateProductDto {
   price: number;
 
   @IsNotEmpty()
-  @IsString()
-  image: string; // Can be a URL or file path
+  @IsUrl()
+  image: string;
 
   @IsNotEmpty()
   @IsNumber()

@@ -1,12 +1,24 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDRiOGQ1NS1kNDY1LTQ2YWUtOTQ1ZS1hYjgyNGZiYzg4NzMiLCJlbWFpbCI6ImpvaG4yQGV4YW1wbGUuY29tIiwicm9sZSI6IkNVU1RPTUVSIiwiaWF0IjoxNzUwNzM0MDA4LCJleHAiOjE3NTA4MjA0MDh9.qlMrgc5Gy4Mod3uqYs0L4hzulkz02OlouEyBYx8WFok
+
+
 ### Create a new user
 POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-  "name": "John Doe",
-  "email": "john@example.com",
+  "name": "John brian",
+  "email": "john2@example.com",
   "password": "password123",
   "role": "customer"
+}
+
+### Login as a user
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "john2@example.com",
+  "password": "password123"
 }
 
 ### Create an admin user
@@ -20,15 +32,28 @@ Content-Type: application/json
   "role": "admin"
 }
 
+### login admin
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+"email": "admin@example.com",
+"password": "admin123"
+}
+
+
 ### Get all users
 GET http://localhost:3000/users
+Authorization: Bearer {{token}}
 
 ### Get user by ID
-GET http://localhost:3000/users/1
+GET http://localhost:3000/users/12328a91-7f61-4875-bc5a-12dcee8219e5
+Authorization: Bearer {{token}}
 
 ### Update user
-PUT http://localhost:3000/users/1
+PUT http://localhost:3000/users/e44b8d55-d465-46ae-945e-ab824fbc8873
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "name": "John Updated",
@@ -36,4 +61,8 @@ Content-Type: application/json
 }
 
 ### Delete user
-DELETE http://localhost:3000/users/1 
+DELETE http://localhost:3000/users/1
+Authorization: Bearer {{token}}
+
+
+

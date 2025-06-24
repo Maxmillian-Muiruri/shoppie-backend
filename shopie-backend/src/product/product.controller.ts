@@ -2,25 +2,44 @@ import {
   Controller,
   Get,
   Post,
-  Put,
-  Delete,
   Body,
+  Put,
   Param,
+  Delete,
   Query,
-  HttpCode,
   HttpStatus,
+  HttpCode,
+  UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ProductService } from './services/product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { IProductResponse } from './interfaces/product.interface';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { AdminGuard } from '../auth/guards/admin.guard';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(
+    private readonly productService: ProductService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
+
+  @Post('upload')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseInterceptors(FileInterceptor('image'))
+  async uploadImage(@UploadedFile() file: Express.Multer.File) {
+    const imageUrl = await this.cloudinaryService.uploadImage(file);
+    return { imageUrl };
+  }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   async createProduct(
     @Body() createProductDto: CreateProductDto,
   ): Promise<IProductResponse> {
@@ -43,6 +62,7 @@ export class ProductController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard, AdminGuard)
   async updateProduct(
     @Param('id') id: string,
     @Body() updateProductDto: UpdateProductDto,
@@ -52,6 +72,7 @@ export class ProductController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   async deleteProduct(@Param('id') id: string): Promise<void> {
     return this.productService.deleteProduct(id);
   }

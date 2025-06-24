@@ -9,49 +9,55 @@ import {
   Req,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { CartService } from './services/cart.service';
 import { AddToCartDto } from './dto/add-to-cart.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
 import { CartItemResponseDto } from './dto/cart-item-response.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CurrentUser } from '../user/decorators/current-user.decorator';
 
 @Controller('cart')
+@UseGuards(JwtAuthGuard)
 export class CartController {
   constructor(private readonly cartService: CartService) {}
-
-  // For now, userId is hardcoded for demo. Replace with @CurrentUser() in real app.
-  private getUserId(req: any): string {
-    return '1'; // Simulate logged-in user with id '1'
-  }
 
   @Post('add')
   @HttpCode(HttpStatus.CREATED)
   async addToCart(
-    @Req() req,
+    @CurrentUser() user: any,
     @Body() dto: AddToCartDto,
   ): Promise<CartItemResponseDto> {
-    return this.cartService.addToCart(this.getUserId(req), dto);
+    return this.cartService.addToCart(user.userId, dto);
   }
 
   @Get()
-  async getCart(@Req() req): Promise<CartItemResponseDto[]> {
-    return this.cartService.getCart(this.getUserId(req));
+  async getCart(@CurrentUser() user: any): Promise<CartItemResponseDto[]> {
+    return this.cartService.getCart(user.userId);
   }
 
   @Delete('remove/:productId')
   @HttpCode(HttpStatus.NO_CONTENT)
   async removeFromCart(
-    @Req() req,
+    @CurrentUser() user: any,
     @Param('productId') productId: string,
   ): Promise<void> {
-    return this.cartService.removeFromCart(this.getUserId(req), productId);
+    return this.cartService.removeFromCart(user.userId, productId);
   }
 
   @Put('update')
   async updateCartItem(
-    @Req() req,
+    @CurrentUser() user: any,
     @Body() dto: UpdateCartItemDto,
   ): Promise<CartItemResponseDto> {
-    return this.cartService.updateCartItem(this.getUserId(req), dto);
+    return this.cartService.updateCartItem(user.userId, dto);
+  }
+
+  @Post('checkout')
+  @HttpCode(HttpStatus.OK)
+  async checkout(@CurrentUser() user: any) {
+    await this.cartService.clearCart(user.userId);
+    return { message: 'Purchase successful! Your cart is now empty.' };
   }
 }

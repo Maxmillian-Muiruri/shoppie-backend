@@ -1,6 +1,10 @@
+### Set your JWT token here after login
+@token = <paste-your-jwt-token-here>
+
 ### Add product to cart
 POST http://localhost:3000/cart/add
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "userId": "4e70b363-6f0f-491d-b7e7-bdf1e305035f",
@@ -10,10 +14,12 @@ Content-Type: application/json
 
 ### Get current user's cart
 GET http://localhost:3000/cart
+Authorization: Bearer {{token}}
 
 ### Update cart item quantity
 PUT http://localhost:3000/cart/update
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "productId": "1",
@@ -21,4 +27,9 @@ Content-Type: application/json
 }
 
 ### Remove product from cart
-DELETE http://localhost:3000/cart/remove/1 
+DELETE http://localhost:3000/cart/remove/1
+Authorization: Bearer {{token}}
+
+### Checkout (buy) cart
+POST http://localhost:3000/cart/checkout
+Authorization: Bearer {{token}} 

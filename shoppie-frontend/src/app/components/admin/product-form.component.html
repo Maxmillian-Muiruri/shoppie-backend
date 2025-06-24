@@ -1,0 +1,24 @@
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input id="name" formControlName="name" type="text" required />
+  </div>
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea id="description" formControlName="description" required></textarea>
+  </div>
+  <div class="form-group">
+    <label for="price">Price</label>
+    <input id="price" formControlName="price" type="number" min="0" required />
+  </div>
+  <div class="form-group">
+    <label for="stockQuantity">Stock Quantity</label>
+    <input id="stockQuantity" formControlName="stockQuantity" type="number" min="0" required />
+  </div>
+  <div class="form-group">
+    <label for="image">Image</label>
+    <input id="image" type="file" (change)="onImageChange($event)" accept="image/*" />
+    <img *ngIf="imagePreview" [src]="imagePreview" alt="Image preview" class="image-preview" />
+  </div>
+  <button type="submit" [disabled]="productForm.invalid">Save Product</button>
+</form> 

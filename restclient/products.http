@@ -1,0 +1,39 @@
+### Set admin token for protected routes
+@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWI0OGQwNS0xOTQ2LTQ5YWEtYjhkYS04YTQxN2Y3ZTc2ODAiLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzUwNzM0NTY4LCJleHAiOjE3NTA4MjA5Njh9.MsOOIYIg69Whjw81t6tevjtKyWefes6aYG2nsMRSmBE
+
+### Create a new product (Admin only)
+POST http://localhost:3000/products
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Gaming Desktop",
+  "shortDescription": "High-end gaming desktop computer",
+  "price": 2499.99,
+  "image": "https://images.pexels.com/photos/1034312/pexels-photo-1034312.jpeg",
+  "stockQuantity": 5
+}
+
+### Get all products (Public - no auth needed)
+GET http://localhost:3000/products
+
+### Search products (Public - no auth needed)
+GET http://localhost:3000/products?search=laptop2
+
+### Get product by ID (Public - no auth needed)
+GET http://localhost:3000/products/fa4aa0cd-2295-49f0-ae1e-69ac9e1366dd
+
+### Update product (Admin only)
+PUT http://localhost:3000/products/12f69b34-4948-4d21-9195-459ce9d309b1
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Updated Laptop",
+  "price": 999.99,
+  "image": "https://images.pexels.com/photos/2047905/pexels-photo-2047905.jpeg"
+}
+
+### Delete product (Admin only)
+DELETE http://localhost:3000/products/fa4aa0cd-2295-49f0-ae1e-69ac9e1366dd
+Authorization: Bearer {{adminToken}}

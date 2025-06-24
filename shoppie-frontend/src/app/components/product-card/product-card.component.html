@@ -1,0 +1,8 @@
+<div class="product-card" (click)="goToDetail()">
+  <img *ngIf="product.imageUrl" [src]="product.imageUrl" alt="{{ product.name }}" class="product-image" />
+  <div class="product-info">
+    <h3>{{ product.name }}</h3>
+    <p class="product-description">{{ product.description }}</p>
+    <div class="product-price">{{ product.price | currency }}</div>
+  </div>
+</div> 

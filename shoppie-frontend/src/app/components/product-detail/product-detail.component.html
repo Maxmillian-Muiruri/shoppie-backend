@@ -1,0 +1,16 @@
+<div class="product-detail-container">
+  <div *ngIf="loading" class="loading">Loading product...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  <div *ngIf="product && !loading && !error" class="product-detail-card">
+    <img *ngIf="product.imageUrl" [src]="product.imageUrl" alt="{{ product.name }}" class="product-detail-image" />
+    <div class="product-detail-info">
+      <h2>{{ product.name }}</h2>
+      <div class="product-detail-price">{{ product.price | currency }}</div>
+      <p class="product-detail-description">{{ product.description }}</p>
+      <button (click)="addToCart()">Add to Cart</button>
+      <div *ngIf="addToCartMessage" class="success">{{ addToCartMessage }}</div>
+      <button (click)="editProduct()">Edit</button>
+      <button (click)="deleteProduct()" class="danger">Delete</button>
+    </div>
+  </div>
+</div> 

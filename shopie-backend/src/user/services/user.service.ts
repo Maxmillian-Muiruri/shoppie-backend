@@ -9,7 +9,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { $Enums, UserRole } from '@prisma/client';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import * as bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -49,6 +49,10 @@ export class UserService {
   }
 
   async findUserByEmail(email: string) {
+    return this.prisma.user.findUnique({ where: { email } });
+  }
+
+  async findByEmail(email: string) {
     return this.prisma.user.findUnique({ where: { email } });
   }
 

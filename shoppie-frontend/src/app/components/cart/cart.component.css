@@ -1,0 +1,72 @@
+.cart {
+  padding: 2rem;
+}
+
+.cart-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+.cart-container h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-bottom: 1.5rem;
+}
+.cart-table th, .cart-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+.cart-table th {
+  background: #f5f5f5;
+  font-weight: 600;
+}
+.cart-table tr:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+input[type="number"] {
+  width: 60px;
+  padding: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+button {
+  margin: 0.25rem 0.5rem 0.25rem 0;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  background: var(--primary-color);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button.danger {
+  background: var(--error-color);
+}
+button:hover {
+  background: var(--secondary-color);
+}
+.loading, .error, .success, .empty {
+  text-align: center;
+  margin: 2rem 0;
+  font-size: 1.1rem;
+}
+.error {
+  color: var(--error-color);
+}
+.success {
+  color: var(--success-color);
+}
+.empty {
+  color: #888;
+} 

@@ -1,0 +1,59 @@
+.admin-dashboard {
+  padding: 2rem;
+}
+
+.admin-dashboard-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+.admin-dashboard-container h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+button {
+  margin: 0.25rem 0.5rem 0.25rem 0;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  background: var(--primary-color);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button.danger {
+  background: var(--error-color);
+}
+button:hover {
+  background: var(--secondary-color);
+}
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.product-table th, .product-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+.product-table th {
+  background: #f5f5f5;
+  font-weight: 600;
+}
+.product-table tr:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+.loading, .error {
+  text-align: center;
+  margin: 2rem 0;
+  font-size: 1.2rem;
+}
+.error {
+  color: var(--error-color);
+} 
