@@ -1,37 +1,47 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Cart } from '../models/cart.model';
-import { AuthService } from './auth.service';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { CartItem, Cart, AddToCartRequest, UpdateCartItemRequest } from '../models/cart.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ 
+  providedIn: 'root' 
+})
 export class CartService {
+  private http = inject(HttpClient);
   private apiUrl = 'http://localhost:3000/cart';
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
-
-  private getAuthHeaders(): HttpHeaders {
-    const token = this.authService.getToken();
-    return new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-  }
-
   getCart(): Observable<Cart> {
-    return this.http.get<Cart>(this.apiUrl, { headers: this.getAuthHeaders() });
+    return this.http.get<CartItem[]>(this.apiUrl).pipe(
+      map(items => this.calculateCartTotals(items))
+    );
   }
 
-  addToCart(productId: string, quantity: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/add`, { productId, quantity }, { headers: this.getAuthHeaders() });
+  addToCart(productId: string, quantity: number): Observable<CartItem> {
+    const request: AddToCartRequest = { productId, quantity };
+    return this.http.post<CartItem>(`${this.apiUrl}/add`, request);
   }
 
-  updateCartItem(productId: string, quantity: number): Observable<any> {
-    return this.http.put(`${this.apiUrl}/update`, { productId, quantity }, { headers: this.getAuthHeaders() });
+  updateCartItem(productId: string, quantity: number): Observable<CartItem> {
+    const request: UpdateCartItemRequest = { productId, quantity };
+    return this.http.put<CartItem>(`${this.apiUrl}/update`, request);
   }
 
-  removeFromCart(productId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/remove/${productId}`, { headers: this.getAuthHeaders() });
+  removeFromCart(productId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/remove/${productId}`);
   }
 
-  checkout(): Observable<any> {
-    return this.http.post(`${this.apiUrl}/checkout`, {}, { headers: this.getAuthHeaders() });
+  checkout(): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/checkout`, {});
+  }
+
+  private calculateCartTotals(items: CartItem[]): Cart {
+    const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+    const totalPrice = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    return {
+      items,
+      totalItems,
+      totalPrice
+    };
   }
 } 

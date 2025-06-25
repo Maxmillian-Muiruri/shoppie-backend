@@ -1,0 +1,36 @@
+<div class="admin-dashboard-container">
+  <div class="admin-header-bar">
+    <h2>Admin Dashboard</h2>
+    <button class="fab" (click)="addProduct()" *ngIf="!showProductForm" title="Add Product">＋</button>
+  </div>
+  <div *ngIf="loading" class="loading">Loading products...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div *ngIf="!loading && !showProductForm">
+    <div class="product-list">
+      <div class="product-card" *ngFor="let product of products">
+        <img *ngIf="product.image" [src]="product.image" alt="{{ product.name }}" class="product-image" />
+        <div class="product-info">
+          <div class="product-title">{{ product.name }}</div>
+          <div class="product-desc">{{ product.shortDescription }}</div>
+          <div class="product-meta">
+            <span class="product-price">{{ product.price | currency }}</span>
+            <span class="product-stock">Stock: {{ product.stockQuantity }}</span>
+          </div>
+        </div>
+        <div class="product-actions">
+          <button (click)="editProduct(product)">Edit</button>
+          <button (click)="deleteProduct(product.id)" class="danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showProductForm">
+    <app-product-form
+      [product]="editingProduct"
+      (saved)="onProductSaved()"
+      (cancelled)="onCancel()">
+    </app-product-form>
+  </div>
+</div> 

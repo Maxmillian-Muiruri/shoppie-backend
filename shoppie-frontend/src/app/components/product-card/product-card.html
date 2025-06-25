@@ -1,0 +1,24 @@
+<div class="product-card" (click)="goToDetail()">
+  <div class="product-image-container">
+    <img *ngIf="product.image" [src]="product.image" alt="{{ product.name }}" class="product-image" />
+    <button 
+      (click)="addToCart($event)" 
+      [disabled]="addingToCart"
+      class="quick-add-btn"
+      title="Add to cart"
+    >
+      <span *ngIf="!addingToCart">+</span>
+      <span *ngIf="addingToCart">...</span>
+    </button>
+  </div>
+  
+  <div class="product-info">
+    <h3>{{ product.name }}</h3>
+    <p class="product-description">{{ product.shortDescription }}</p>
+    <div class="product-price">{{ product.price | currency }}</div>
+    
+    <div *ngIf="addToCartMessage" class="add-to-cart-message" [class.success]="!addToCartMessage.includes('Failed')" [class.error]="addToCartMessage.includes('Failed')">
+      {{ addToCartMessage }}
+    </div>
+  </div>
+</div> 

@@ -1,48 +1,82 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { LoginRequest, RegisterRequest, AuthResponse } from '../models/auth.model';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  access_token: string;
+  user: {
+    id: string;
+    email: string;
+    name: string;
+    role: string;
+  };
+}
+
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
+  private http = inject(HttpClient);
   private apiUrl = 'http://localhost:3000';
-  private tokenKey = 'shoppie_token';
+  
+  private currentUserSubject = new BehaviorSubject<any>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {}
-
-  register(data: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/users`, data);
+  constructor() {
+    // Check for existing token on startup
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    if (token && user) {
+      this.currentUserSubject.next(JSON.parse(user));
+    }
   }
 
-  login(data: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, data).pipe(
-      tap(res => {
-        if (res && res.accessToken) {
-          localStorage.setItem(this.tokenKey, res.accessToken);
-        }
-      })
-    );
+  login(credentials: LoginRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials)
+      .pipe(
+        tap(response => {
+          localStorage.setItem('token', response.access_token);
+          localStorage.setItem('user', JSON.stringify(response.user));
+          this.currentUserSubject.next(response.user);
+        })
+      );
+  }
+
+  register(userData: RegisterRequest): Observable<any> {
+    return this.http.post(`${this.apiUrl}/users`, userData);
   }
 
   logout(): void {
-    localStorage.removeItem(this.tokenKey);
-    this.router.navigate(['/login']);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.currentUserSubject.next(null);
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem(this.tokenKey);
+    return !!localStorage.getItem('token');
+  }
+
+  getCurrentUser(): any {
+    return this.currentUserSubject.value;
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return localStorage.getItem('token');
   }
 
-  getCurrentUser(): Observable<any> {
-    const token = this.getToken();
-    if (!token) return of(null);
-    // Optionally decode JWT or call backend for user info
-    return of(null); // Replace with real implementation
+  isAdmin(): boolean {
+    const user = this.getCurrentUser();
+    return user && user.role === 'ADMIN';
   }
 } 

@@ -1,0 +1,54 @@
+<div class="product-detail-container">
+  <div *ngIf="loading" class="loading">Loading product...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  
+  <div *ngIf="product && !loading && !error" class="product-detail-card">
+    <img *ngIf="product.image" [src]="product.image" alt="{{ product.name }}" class="product-detail-image" />
+    
+    <div class="product-detail-info">
+      <h2>{{ product.name }}</h2>
+      <div class="product-detail-price">{{ product.price | currency }}</div>
+      <p class="product-detail-description">{{ product.shortDescription }}</p>
+      
+      <div class="product-stock" *ngIf="product.stockQuantity !== undefined">
+        <strong>Stock:</strong> {{ product.stockQuantity }} available
+      </div>
+      
+      <div class="add-to-cart-section">
+        <div class="quantity-selector">
+          <label for="quantity">Quantity:</label>
+          <input 
+            type="number" 
+            id="quantity"
+            [(ngModel)]="quantity" 
+            min="1" 
+            max="{{ product.stockQuantity || 99 }}"
+            class="quantity-input"
+          />
+        </div>
+        
+        <button 
+          (click)="addToCart()" 
+          [disabled]="addingToCart || quantity < 1"
+          class="add-to-cart-btn"
+        >
+          <span *ngIf="!addingToCart">Add to Cart</span>
+          <span *ngIf="addingToCart">Adding...</span>
+        </button>
+        
+        <div *ngIf="addToCartMessage" class="message" [class.success]="!addToCartMessage.includes('Failed')" [class.error]="addToCartMessage.includes('Failed')">
+          {{ addToCartMessage }}
+        </div>
+      </div>
+      
+      <div class="admin-actions">
+        <button (click)="editProduct()" class="edit-btn">Edit</button>
+        <button (click)="deleteProduct()" class="delete-btn">Delete</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="back-button">
+    <button (click)="goBack()" class="back-btn">← Back to Products</button>
+  </div>
+</div> 

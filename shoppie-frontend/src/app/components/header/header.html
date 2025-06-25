@@ -1,0 +1,22 @@
+<header>
+  <nav>
+    <a routerLink="/" class="logo">Shoppie</a>
+    <a routerLink="/products">Products</a>
+    
+    <form class="search-form" (ngSubmit)="search()" autocomplete="off">
+      <input type="text" [(ngModel)]="searchTerm" name="search" placeholder="Search products..." (keydown.enter)="search()" />
+      <button type="submit">🔍</button>
+    </form>
+    <div class="nav-right">
+      <a routerLink="/cart" *ngIf="isLoggedIn" class="cart-link">
+        🛒 Cart
+        <span *ngIf="cartCount > 0" class="cart-count">{{ cartCount }}</span>
+      </a>
+      <a routerLink="/profile" *ngIf="isLoggedIn">Profile</a>
+      <a routerLink="/admin" *ngIf="isAdmin">Admin</a>
+      <a routerLink="/login" *ngIf="!isLoggedIn">Login</a>
+      <a routerLink="/register" *ngIf="!isLoggedIn">Register</a>
+      <a (click)="logout()" *ngIf="isLoggedIn" class="logout-link">Logout</a>
+    </div>
+  </nav>
+</header> 

@@ -9,6 +9,8 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  Request,
+  Req,
 } from '@nestjs/common';
 import { UserService } from './services/user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -54,5 +56,21 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   async deleteUser(@Param('id') id: string): Promise<void> {
     return this.userService.deleteUser(id);
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  async getMe(@Req() req: Request) {
+    // @ts-ignore
+    const userId = req.user?.userId;
+    return this.userService.findUserById(userId);
+  }
+
+  @Put('profile')
+  @UseGuards(JwtAuthGuard)
+  async updateProfile(@Req() req: Request, @Body() updateUserDto: UpdateUserDto) {
+    // @ts-ignore
+    const userId = req.user?.userId;
+    return this.userService.updateUser(userId, updateUserDto);
   }
 }

@@ -1,0 +1,1 @@
+{"ast":null,"code":"export const authInterceptorFn = (req, next) => {\n  const modifiedReq = req.clone({\n    setHeaders: {\n      // Example: Authorization: `Bearer YOUR_TOKEN`\n    }\n  });\n  return next(modifiedReq);\n};","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

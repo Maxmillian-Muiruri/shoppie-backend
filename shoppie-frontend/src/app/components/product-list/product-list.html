@@ -1,0 +1,12 @@
+<div class="product-list-container">
+  <h2>Products</h2>
+  <div class="search-bar" *ngIf="searchTerm">
+    <button class="back-arrow" (click)="clearSearch()" title="Back to all products">&#8592; Back to all products</button>
+  </div>
+  <div *ngIf="loading" class="loading">Loading products...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  <div class="product-grid" *ngIf="!loading && !error && products.length">
+    <app-product-card *ngFor="let product of products" [product]="product"></app-product-card>
+  </div>
+  <div *ngIf="!loading && !error && !products.length" class="empty">No products found.</div>
+</div> 

@@ -1,7 +1,8 @@
 export interface User {
   id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
   role: 'admin' | 'customer';
+  createdAt?: string;
+  updatedAt?: string;
 } 

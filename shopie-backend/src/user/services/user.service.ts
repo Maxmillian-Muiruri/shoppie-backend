@@ -10,10 +10,16 @@ import { $Enums, UserRole } from '@prisma/client';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
+import { MailService } from '../../mail/mail-service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly mailService: MailService,
+    private readonly configService: ConfigService,
+  ) {}
 
   async createUser(createUserDto: CreateUserDto) {
     const existingUser = await this.prisma.user.findUnique({
@@ -34,6 +40,9 @@ export class UserService {
             : undefined) || UserRole.CUSTOMER,
       },
     });
+    await this.mailService.sendWelcomeEmail(user.email, user.name);
+    const adminEmail = this.configService.get<string>('ADMIN_EMAIL', 'admin@shoppie.com');
+    await this.mailService.sendAdminNewUserEmail(adminEmail, user.name, user.email);
     return this.mapToUserResponse(user);
   }
 
@@ -79,6 +88,7 @@ export class UserService {
         password,
       },
     });
+    await this.mailService.sendProfileUpdatedEmail(updated.email, updated.name);
     return this.mapToUserResponse(updated);
   }
 
