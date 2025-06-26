@@ -1,0 +1,70 @@
+<div class="checkout-container">
+  <div class="checkout-header">
+    <h1>Checkout</h1>
+    <p>Complete your purchase</p>
+  </div>
+  
+  <div class="checkout-content">
+    <!-- Success Message -->
+    <div *ngIf="successMessage" class="success-message">
+      <h3>Success!</h3>
+      <p>{{ successMessage }}</p>
+      <button class="btn-primary" (click)="goToProducts()">Continue Shopping</button>
+      <button class="btn-secondary" (click)="router.navigate(['/orders'])">View My Orders</button>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="order-summary" *ngIf="cartItems.length > 0">
+      <h3>Order Summary</h3>
+      <div class="cart-items">
+        <div class="cart-item" *ngFor="let item of cartItems">
+          <img [src]="item.image" [alt]="item.name" class="product-image">
+          <div class="item-details">
+            <h4>{{ item.name }}</h4>
+            <p>Quantity: {{ item.quantity }}</p>
+            <p class="price">${{ (item.price * item.quantity).toFixed(2) }}</p>
+          </div>
+        </div>
+        <div class="total">
+          <h4>Total: ${{ totalAmount.toFixed(2) }}</h4>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shipping Form -->
+    <div class="shipping-form" *ngIf="cartItems.length > 0">
+      <h3>Shipping Information</h3>
+      <form (ngSubmit)="placeOrder()" #checkoutForm="ngForm">
+        <div class="form-group">
+          <label for="shippingAddress">Shipping Address:</label>
+          <textarea
+            id="shippingAddress"
+            name="shippingAddress"
+            [(ngModel)]="shippingAddress"
+            required
+            rows="4"
+            placeholder="Enter your complete shipping address..."
+            class="form-control"
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button 
+            type="button" 
+            (click)="goToCart()" 
+            class="btn-secondary"
+          >
+            Back to Cart
+          </button>
+          <button 
+            type="submit" 
+            [disabled]="!checkoutForm.valid || isProcessing"
+            class="btn-primary"
+          >
+            {{ isProcessing ? 'Processing...' : 'Place Order' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> 

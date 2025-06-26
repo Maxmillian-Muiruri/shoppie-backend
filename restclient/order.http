@@ -1,0 +1,106 @@
+### Variables
+@baseUrl = http://localhost:3000
+
+### Use existing tokens from other HTTP files
+@customerToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmY2NkZjJjMy0xZjQ0LTQ3ZjUtODc5ZC04OWI5ODEyMzIxMzgiLCJlbWFpbCI6InBldGVyQGV4YW1wbGUuY29tIiwicm9sZSI6IkNVU1RPTUVSIiwiaWF0IjoxNzUwOTEyMDQwLCJleHAiOjE3NTA5OTg0NDB9.tznBn_TjBn9m46l_mZsuTA0YIMVpDHDCCaZq_poaPMc
+
+@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZWI0OGQwNS0xOTQ2LTQ5YWEtYjhkYS04YTQxN2Y3ZTc2ODAiLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzUwNzM0NTY4LCJleHAiOjE3NTA4MjA5Njh9.MsOOIYIg69Whjw81t6tevjtKyWefes6aYG2nsMRSmBE
+
+### ===== CUSTOMER ORDER OPERATIONS =====
+
+### 1. Get User's Orders (Customer)
+GET {{baseUrl}}/orders/my-orders
+Authorization: Bearer {{customerToken}}
+
+### 2. Create Order from Cart (Customer)
+# Note: Make sure you have items in your cart first using cart.http
+POST {{baseUrl}}/orders
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{
+  "shippingAddress": "123 Main St, City, State 12345"
+}
+
+### 3. Get Specific Order by ID (Customer)
+# Replace {{orderId}} with actual order ID from step 2
+GET {{baseUrl}}/orders/{{orderId}}
+Authorization: Bearer {{customerToken}}
+
+### ===== ADMIN ORDER OPERATIONS =====
+
+### 4. Get All Orders (Admin Only)
+GET {{baseUrl}}/orders
+Authorization: Bearer {{adminToken}}
+
+### 5. Update Order Status to Confirmed (Admin Only)
+# Replace {{orderId}} with actual order ID
+PUT {{baseUrl}}/orders/{{orderId}}/status
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "status": "CONFIRMED"
+}
+
+### 6. Update Order Status to Shipped (Admin Only)
+PUT {{baseUrl}}/orders/{{orderId}}/status
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "status": "SHIPPED"
+}
+
+### 7. Update Order Status to Delivered (Admin Only)
+PUT {{baseUrl}}/orders/{{orderId}}/status
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "status": "DELIVERED"
+}
+
+### 8. Update Order Status to Cancelled (Admin Only)
+PUT {{baseUrl}}/orders/{{orderId}}/status
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "status": "CANCELLED"
+}
+
+### ===== ERROR TESTING =====
+
+### Test Order Creation with Empty Cart (should fail)
+POST {{baseUrl}}/orders
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{
+  "shippingAddress": "123 Main St, City, State 12345"
+}
+
+### Test Order Creation without Auth (should fail)
+POST {{baseUrl}}/orders
+Content-Type: application/json
+
+{
+  "shippingAddress": "123 Main St, City, State 12345"
+}
+
+### Test Get Orders without Auth (should fail)
+GET {{baseUrl}}/orders/my-orders
+
+### Test Get All Orders as Regular User (should fail)
+GET {{baseUrl}}/orders
+Authorization: Bearer {{customerToken}}
+
+### Test Update Order Status as Regular User (should fail)
+PUT {{baseUrl}}/orders/{{orderId}}/status
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{
+  "status": "CONFIRMED"
+} 

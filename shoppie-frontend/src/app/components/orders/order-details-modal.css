@@ -1,0 +1,104 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+}
+
+.modal-card {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  padding: 2rem 1.5rem;
+  min-width: 320px;
+  max-width: 95vw;
+  width: 400px;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: #64748b;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.close-btn:hover {
+  color: #ef4444;
+}
+
+.order-status {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.status-badge {
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.status-pending { background: #fef3c7; color: #92400e; }
+.status-confirmed { background: #dbeafe; color: #1e40af; }
+.status-shipped { background: #d1fae5; color: #065f46; }
+.status-delivered { background: #dcfce7; color: #166534; }
+.status-cancelled { background: #fee2e2; color: #991b1b; }
+
+.order-date {
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.shipping-info {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+}
+
+.order-items {
+  margin: 0.5rem 0;
+}
+.order-items h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  color: #2563eb;
+}
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.98rem;
+}
+.order-item:last-child {
+  border-bottom: none;
+}
+.item-name { font-weight: 500; color: #374151; }
+.item-qty, .item-price, .item-total { color: #64748b; font-size: 0.95rem; }
+.order-summary {
+  text-align: right;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+@media (max-width: 600px) {
+  .modal-card {
+    width: 98vw;
+    min-width: unset;
+    padding: 1rem 0.5rem;
+  }
+} 

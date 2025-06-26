@@ -82,22 +82,8 @@ export class CartComponent implements OnInit {
   checkout() {
     if (!this.cart || this.cart.items.length === 0) return;
     
-    this.updating = true;
-    this.error = '';
-    this.checkoutMessage = '';
-    
-    this.cartService.checkout().subscribe({
-      next: (response) => {
-        this.updating = false;
-        this.checkoutMessage = response.message;
-        this.cart = null; // Clear cart after successful checkout
-      },
-      error: (error) => {
-        this.updating = false;
-        this.error = error.error?.message || 'Checkout failed';
-        console.error('Checkout error:', error);
-      }
-    });
+    // Navigate to checkout page instead of calling checkout API
+    this.router.navigate(['/checkout']);
   }
 
   continueShopping() {

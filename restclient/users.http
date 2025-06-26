@@ -6,8 +6,8 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-  "name": "John brian",
-  "email": "john2@example.com",
+  "name": "peter",
+  "email": "peter@example.com",
   "password": "password123",
   "role": "customer"
 }
@@ -17,12 +17,12 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "john2@example.com",
+  "email": "peter@example.com",
   "password": "password123"
 }
 
 ### Create an admin user
-POST http://localhost:3000/users
+POST http://localhost:3000/users/
 Content-Type: application/json
 
 {
@@ -47,7 +47,7 @@ GET http://localhost:3000/users
 Authorization: Bearer {{token}}
 
 ### Get user by ID
-GET http://localhost:3000/users/12328a91-7f61-4875-bc5a-12dcee8219e5
+GET http://localhost:3000/users/fccdf2c3-1f44-47f5-879d-89b981232138
 Authorization: Bearer {{token}}
 
 ### Update user

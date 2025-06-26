@@ -117,6 +117,140 @@ export class MailService {
     await this.sendEmail(options);
   }
 
+  async sendOrderConfirmationEmail(
+    to: string, 
+    customerName: string, 
+    orderId: string, 
+    orderData: {
+      status: string;
+      totalAmount: number;
+      shippingAddress: string;
+      orderItems: Array<{
+        productName: string;
+        quantity: number;
+        price: number;
+      }>;
+      createdAt: Date;
+    }
+  ): Promise<void> {
+    const orderTrackingUrl = `${this.configService.get<string>('FRONTEND_URL', 'http://localhost:4200')}/orders`;
+    
+    const context = {
+      customerName,
+      customerEmail: to,
+      orderId: orderId.slice(0, 8), // Show only first 8 characters for cleaner display
+      status: orderData.status,
+      totalAmount: orderData.totalAmount,
+      shippingAddress: orderData.shippingAddress,
+      orderItems: orderData.orderItems,
+      orderDate: orderData.createdAt.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }),
+      orderTrackingUrl
+    };
+
+    const options: EmailOptions = {
+      to,
+      subject: `Order Confirmation #${orderId.slice(0, 8)} - Shoppie`,
+      template: 'order-confirmation',
+      context,
+    };
+
+    await this.sendEmail(options);
+  }
+
+  async sendAdminOrderNotificationEmail(
+    adminEmail: string,
+    orderData: {
+      orderId: string;
+      customerName: string;
+      customerEmail: string;
+      status: string;
+      totalAmount: number;
+      shippingAddress: string;
+      orderItems: Array<{
+        productName: string;
+        quantity: number;
+        price: number;
+      }>;
+      createdAt: Date;
+    }
+  ): Promise<void> {
+    const adminDashboardUrl = `${this.configService.get<string>('FRONTEND_URL', 'http://localhost:4200')}/admin`;
+    const orderDetailsUrl = `${this.configService.get<string>('FRONTEND_URL', 'http://localhost:4200')}/admin?tab=orders`;
+    
+    const context = {
+      orderId: orderData.orderId.slice(0, 8), // Show only first 8 characters for cleaner display
+      customerName: orderData.customerName,
+      customerEmail: orderData.customerEmail,
+      status: orderData.status,
+      totalAmount: orderData.totalAmount,
+      shippingAddress: orderData.shippingAddress,
+      orderItems: orderData.orderItems,
+      orderDate: orderData.createdAt.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }),
+      adminDashboardUrl,
+      orderDetailsUrl
+    };
+
+    const options: EmailOptions = {
+      to: adminEmail,
+      subject: `New Order #${orderData.orderId.slice(0, 8)} - Admin Notification`,
+      template: 'admin-order-notification',
+      context,
+    };
+
+    await this.sendEmail(options);
+  }
+
+  async sendOrderStatusUpdateEmail(
+    customerEmail: string,
+    customerName: string,
+    orderData: {
+      orderId: string;
+      status: string;
+      totalAmount: number;
+      shippingAddress: string;
+      orderItems: Array<{
+        productName: string;
+        quantity: number;
+        price: number;
+      }>;
+      updatedAt: Date;
+    }
+  ): Promise<void> {
+    const orderTrackingUrl = `${this.configService.get<string>('FRONTEND_URL', 'http://localhost:4200')}/orders`;
+    
+    const context = {
+      customerName,
+      orderId: orderData.orderId.slice(0, 8), // Show only first 8 characters for cleaner display
+      status: orderData.status,
+      totalAmount: orderData.totalAmount,
+      shippingAddress: orderData.shippingAddress,
+      orderItems: orderData.orderItems,
+      updatedAt: orderData.updatedAt,
+      orderTrackingUrl
+    };
+
+    const options: EmailOptions = {
+      to: customerEmail,
+      subject: `Order Status Updated to ${orderData.status} - #${orderData.orderId.slice(0, 8)}`,
+      template: 'order-status-update',
+      context,
+    };
+
+    await this.sendEmail(options);
+  }
+
   private async renderTemplate(templateName: string, context: Record<string, any>): Promise<string> {
     try {
       const templatePath = path.join(this.templatesPath, `${templateName}.ejs`);

@@ -24,6 +24,9 @@ model User {
   updatedAt DateTime @updatedAt
 
   cartItems CartItem[]
+
+  resetPasswordCode        String?   
+  resetPasswordCodeExpiry  DateTime? 
 }
 
 model Product {

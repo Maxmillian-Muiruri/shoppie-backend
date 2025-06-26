@@ -6,6 +6,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { $Enums, UserRole } from '@prisma/client';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
@@ -41,8 +42,15 @@ export class UserService {
       },
     });
     await this.mailService.sendWelcomeEmail(user.email, user.name);
-    const adminEmail = this.configService.get<string>('ADMIN_EMAIL', 'admin@shoppie.com');
-    await this.mailService.sendAdminNewUserEmail(adminEmail, user.name, user.email);
+    const adminEmail = this.configService.get<string>(
+      'ADMIN_EMAIL',
+      'admin@shoppie.com',
+    );
+    await this.mailService.sendAdminNewUserEmail(
+      adminEmail,
+      user.name,
+      user.email,
+    );
     return this.mapToUserResponse(user);
   }
 
@@ -62,7 +70,20 @@ export class UserService {
   }
 
   async findByEmail(email: string) {
-    return this.prisma.user.findUnique({ where: { email } });
+    return this.prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        password: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+        resetPasswordCode: true,
+        resetPasswordCodeExpiry: true,
+      },
+    });
   }
 
   async updateUser(id: string, updateUserDto: UpdateUserDto) {
@@ -86,6 +107,12 @@ export class UserService {
         name: updateUserDto.name ?? user.name,
         email: updateUserDto.email ?? user.email,
         password,
+        resetPasswordCode:
+          updateUserDto.resetPasswordCode ?? user.resetPasswordCode ?? null,
+        resetPasswordCodeExpiry:
+          updateUserDto.resetPasswordCodeExpiry ??
+          user.resetPasswordCodeExpiry ??
+          null,
       },
     });
     await this.mailService.sendProfileUpdatedEmail(updated.email, updated.name);
@@ -106,6 +133,8 @@ export class UserService {
       role: user.role,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
+      resetPasswordCode: user.resetPasswordCode,
+      resetPasswordCodeExpiry: user.resetPasswordCodeExpiry,
     };
   }
 }

@@ -1,12 +1,32 @@
 <div class="admin-dashboard-container">
   <div class="admin-header-bar">
     <h2>Admin Dashboard</h2>
-    <button class="fab" (click)="addProduct()" *ngIf="!showProductForm" title="Add Product">＋</button>
+    <button class="fab" (click)="addProduct()" *ngIf="!showProductForm && activeTab === 'products'" title="Add Product">＋</button>
   </div>
-  <div *ngIf="loading" class="loading">Loading products...</div>
+
+  <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <button 
+      [class.active]="activeTab === 'products'" 
+      (click)="setActiveTab('products')"
+      class="tab-button"
+    >
+      Products
+    </button>
+    <button 
+      [class.active]="activeTab === 'orders'" 
+      (click)="setActiveTab('orders')"
+      class="tab-button"
+    >
+      Orders
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading...</div>
   <div *ngIf="error" class="error">{{ error }}</div>
 
-  <div *ngIf="!loading && !showProductForm">
+  <!-- Products Tab -->
+  <div *ngIf="activeTab === 'products' && !loading && !showProductForm">
     <div class="product-list">
       <div class="product-card" *ngFor="let product of products">
         <img *ngIf="product.image" [src]="product.image" alt="{{ product.name }}" class="product-image" />
@@ -21,6 +41,59 @@
         <div class="product-actions">
           <button (click)="editProduct(product)">Edit</button>
           <button (click)="deleteProduct(product.id)" class="danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Orders Tab -->
+  <div *ngIf="activeTab === 'orders' && !loading">
+    <div class="orders-list">
+      <div class="order-card" *ngFor="let order of activeOrders">
+        <div class="order-header">
+          <div class="order-info">
+            <div class="user-info" *ngIf="order.user">
+              <strong class="user-email">{{ order.user.email }}</strong>
+              <span class="user-name">({{ order.user.name }})</span>
+            </div>
+            <h3>Order #{{ order.id.slice(0, 8) }}</h3>
+            <p class="order-date">{{ order.createdAt | date:'medium' }}</p>
+            <p class="order-total">Total: {{ order.totalAmount | currency }}</p>
+          </div>
+          <div class="order-status">
+            <span class="status-badge" [class]="getStatusClass(order.status)">
+              {{ order.status }}
+            </span>
+          </div>
+        </div>
+
+        <div class="order-items">
+          <div class="order-item" *ngFor="let item of order.orderItems">
+            <span class="item-name">{{ item.productName }}</span>
+            <span class="item-quantity">x{{ item.quantity }}</span>
+            <span class="item-price">{{ item.price | currency }}</span>
+          </div>
+        </div>
+
+        <div class="order-shipping">
+          <strong>Shipping Address:</strong>
+          <p>{{ order.shippingAddress }}</p>
+        </div>
+
+        <div class="order-actions">
+          <label for="status-{{ order.id }}">Update Status:</label>
+          <select 
+            [id]="'status-' + order.id"
+            [value]="order.status"
+            (change)="updateOrderStatus(order.id, $event.target.value)"
+            class="status-select"
+          >
+            <option value="PENDING">Pending</option>
+            <option value="CONFIRMED">Confirmed</option>
+            <option value="SHIPPED">Shipped</option>
+            <option value="DELIVERED">Delivered</option>
+            <option value="CANCELLED">Cancelled</option>
+          </select>
         </div>
       </div>
     </div>

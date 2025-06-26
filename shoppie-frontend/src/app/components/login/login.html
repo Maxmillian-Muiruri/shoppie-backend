@@ -19,6 +19,7 @@
       <button type="submit" [disabled]="loading">Login</button>
       <div class="error" *ngIf="error">{{ error }}</div>
     </form>
+    <a routerLink="/forgot-password">Forgot Password?</a>
     <div class="divider"><span>or</span></div>
     <div class="register-link">
       Don't have an account? <a routerLink="/register">Register</a>

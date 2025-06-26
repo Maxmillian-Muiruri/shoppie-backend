@@ -8,6 +8,8 @@ export interface IUser {
   role: UserRole;
   createdAt: Date;
   updatedAt: Date;
+  resetPasswordCode?: string | null;
+  resetPasswordCodeExpiry?: Date | null;
 }
 
 export interface IUserResponse {

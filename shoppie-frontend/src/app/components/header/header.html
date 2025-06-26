@@ -12,11 +12,14 @@
         🛒 Cart
         <span *ngIf="cartCount > 0" class="cart-count">{{ cartCount }}</span>
       </a>
+      <a routerLink="/orders" *ngIf="isLoggedIn">Orders</a>
       <a routerLink="/profile" *ngIf="isLoggedIn">Profile</a>
       <a routerLink="/admin" *ngIf="isAdmin">Admin</a>
       <a routerLink="/login" *ngIf="!isLoggedIn">Login</a>
       <a routerLink="/register" *ngIf="!isLoggedIn">Register</a>
       <a (click)="logout()" *ngIf="isLoggedIn" class="logout-link">Logout</a>
     </div>
+    <a routerLink="/forgot-password">Forgot Password?</a>
+    <a routerLink="/reset-password">Reset Password</a>
   </nav>
 </header> 
